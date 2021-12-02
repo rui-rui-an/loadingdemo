@@ -49,7 +49,7 @@ export default {
       this.getList()
     },
     async getList () {
-      const res = await test('.loadingdom')
+      const res = await test({ loading: true, loadingDom: '.loadingdom' })
       console.log(res)
     }
   }

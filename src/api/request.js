@@ -117,6 +117,7 @@ _fetch.interceptors.response.use(
     // }
   },
   function (error) {
+    console.log(error);
     closeLoading()
     return Promise.reject(error)
   }
