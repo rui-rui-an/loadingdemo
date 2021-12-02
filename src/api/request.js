@@ -25,29 +25,32 @@ function closeLoading () {
   loading && loading.close()
 }
 
-let cancelArr = []
+// let cancelArr = []
 // 找出cancelArr中相同url的取消方法并调用
-window.cancelEvent = function (url, cancelAll) {
-  // const _index = cancelArr.findIndex((item, index) => {
-  //   return item.url === url
-  // })
-  // if (_index !== -1) {
-  //   cancelArr[_index].fn()
-  // }
-  cancelArr = cancelArr.filter((item, index) => {
-    if (cancelAll) {
-      item.fn()
-      return false
-    } else {
-      if (item.url === url) {
-        item.fn()
-        return false
-      } else {
-        return true
-      }
-    }
-  })
-}
+// window.cancelEvent = function (config, cancelAll) {
+//   // const _index = cancelArr.findIndex((item, index) => {
+//   //   return item.url === url
+//   // })
+//   // if (_index !== -1) {
+//   //   cancelArr[_index].fn()
+//   // }
+//   cancelArr = cancelArr.filter((item, index) => {
+//     if (cancelAll) {
+//       item.fn()
+//       return false
+//     } else {
+//       if (item.url === config.url) {
+//         if (config.loading) {
+//           openLoading(config.loadingDom)
+//         }
+//         item.fn()
+//         return false
+//       } else {
+//         return true
+//       }
+//     }
+//   })
+// }
 /*请求拦截*/
 _fetch.interceptors.request.use(
   function (config) {
@@ -55,20 +58,20 @@ _fetch.interceptors.request.use(
     // 有部分开发人员,你多传参数也ok,有部分开发,写代码很严格.,你多传任意参数它都报错
     // 需要请求头,就传,不需要就不要传
     // 调用取消,找出相同url的取消方法调用
-    window.cancelEvent(config.url, false)
-    if (config.needToken) {
-      config.headers.authorization = `Bearer ${getLocal()}`
-    }
+    // window.cancelEvent(config, false)
+    // if (config.needToken) {
+    //   config.headers.authorization = `Bearer ${getLocal()}`
+    // }
     // 设置 loading
     if (config.loading) {
       openLoading(config.loadingDom)
     }
-    config.cancelToken = new axios.CancelToken(function (cancel) {
-      cancelArr.push({
-        fn: cancel,
-        url: config.url
-      })
-    })
+    // config.cancelToken = new axios.CancelToken(function (cancel) {
+    //   cancelArr.push({
+    //     fn: cancel,
+    //     url: config.url
+    //   })
+    // })
     // window.console.log('cancelArr', cancelArr)
 
     return config
@@ -81,7 +84,9 @@ _fetch.interceptors.request.use(
 /*响应拦截*/
 _fetch.interceptors.response.use(
   function (res) {
-    if (res.config.loading) { closeLoading() }
+    if (res.config.loading) {
+      closeLoading()
+    }
     return res
     // window.console.log('响应拦截', res)
     // if (res.data.code === 200) {
@@ -117,7 +122,7 @@ _fetch.interceptors.response.use(
     // }
   },
   function (error) {
-    console.log(error);
+    console.log(error)
     closeLoading()
     return Promise.reject(error)
   }
