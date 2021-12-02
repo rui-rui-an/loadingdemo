@@ -6,4 +6,12 @@ function test (loadingObj) {
     ...loadingObj
   })
 }
+function test2 (data,loadingObj) {
+  return _fetch({
+    url: '/getlist/test2',
+    method: 'post',
+    data,
+    ...loadingObj
+  })
+}
 export { test }
